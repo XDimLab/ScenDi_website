@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="3D-to-2D Scene Diffusion Cascades for Urban Generation">
+  <meta name="keywords" content="Urban, Scene Generation, 3D-aware Video Generation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>ScenDi: 3D-to-2D Scene Diffusion Cascades for Urban Generation</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/app.css">
+  <link rel="icon" href="./static/images/icon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/video_comparison.js"></script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <!--MathJax-->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+</head>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">ScenDi: 3D-to-2D Scene Diffusion Cascades for Urban Generation</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="">Hanlei Guo</a><sup>1,2</sup>,</span>
+              <span class="author-block">
+                <a href="https://jiahao-shao1.github.io/">Jiahao Shao</a><sup>1,2</sup>,</span>
+              <span class="author-block">
+                <a href="https://xinyachen21.github.io/">Xinya Chen</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href=" ">Xiyang Tan</a><sup>3</sup>,
+              </span>
+              <span class="author-block">
+                <a href=" ">Sheng Miao</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://shenyujun.github.io/">Yujun Shen</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://yiyiliao.github.io/">Yiyi Liao</a><sup>1*</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Zhejiang University,</span>
+              <span class="author-block"><sup>2</sup>Ant Group,</span>
+              <span class="author-block"><sup>3</sup>The University of British Columbia</span>
+            </div>            
+
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <!-- <span class="link-block">
+                <a href="https://arxiv.org/pdf/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2601.15221" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <!-- <span class="link-block">
+                  <a
+                    href="#"
+                    class="external-link button is-normal is-rounded is-dark"
+                    onclick="return false;"
+                    style="cursor: not-allowed;"
+                  >
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code (coming soon)</span>
+                  </a>
+                </span> -->
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <!-- <video id="teaser" autoplay muted loop playsinline height="100%">
+          <source src="./static/videos/teaser.mp4" type="video/mp4">
+        </video> -->
+        <img src="./static/images/teaser.png" class="interpolation-image" />
+        <!-- <h2 class="subtitle has-text-centered">
+          <span class="dnerf">ScenDi</span> generates high-quality urban scenes using a 3D-to-2D Scene Diffusion cascade, with optional condition signals like text and layout for controllable 3D space generation. Our method provides flexible camera control, even though our training data primarily consists of forward-moving trajectories.
+        </h2> -->
+      </div>
+    </div>
+  </section>
+
+  <section class="section has-background-light">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Recent advancements in 3D object generation using diffusion models have achieved remarkable success, 
+              but generating realistic 3D urban scenes remains challenging. Existing methods relying solely on 3D 
+              diffusion models tend to suffer a degradation in appearance details, while those utilizing only 2D 
+              diffusion models typically compromise camera controllability. To overcome this limitation, we propose ScenDi, 
+              a method for urban scene generation that integrates both 3D and 2D diffusion models. We first train a 3D latent 
+              diffusion model to generate 3D Gaussians, enabling the rendering of images at a relatively low resolution. 
+              To enable controllable synthesis, this 3DGS generation process can be optionally conditioned by specifying 
+              inputs such as 3d bounding boxes, road maps, or text prompts. Then, we train a 2D video diffusion model to 
+              enhance appearance details conditioned on rendered images from the 3D Gaussians. By leveraging the coarse 3D 
+              scene as guidance for 2D video diffusion, ScenDi generates desired scenes based on input conditions and 
+              successfully adheres to accurate camera trajectories. Experiments on two challenging real-world datasets, 
+              Waymo and KITTI-360, demonstrate the effectiveness of our approach. 
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Paper video. -->
+      <!-- <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-video">
+            <iframe src="https://drive.google.com/file/d/13oALN6RuJGcwhVAVQROJbjDmiQQzwFDe/preview"
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div> -->
+      <!--/ Paper video. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Pipeline</h2>
+      <img id="method" width="100%" src="./static/images/pipeline.svg" alt="ScenDi pipeline"/>
+      <p class="has-text-justified">
+        ScenDi leverages 3D and 2D diffusion cascades to generate high-quality urban scenes. <strong>Top:</strong> We first build a Voxel-to-3DGS VQ-VAE to reconstruct scenes in a feed-forward manner.
+        The input is a colored voxel grid $\mathcal{V}$ constructed based on off-the-shelf metric depth estimator, whereas the output is a set of 3D Gaussian primitives $\mathcal{G}$. 
+        Then, we train a 3D diffusion model ${\epsilon}_{\theta}^{\text{3D}}$ on the latent space $\mathbf{z}^{\mathcal{V}}$ to generate coarse 3D scenes, optionally conditioning on signals such as road maps or 
+        text prompts to enable explicit control over the content. <strong>Bottom:</strong> Based on the coarse 3D scene, we train a 2D video diffusion model to refine foreground appearance details 
+        as well as generate distant areas. We achieve this by adopting video clip $\tilde{\mathcal{C}}$ rendered from generated 3DGS as 3D conditional signals to fine-tune a conditional 
+        2D latent diffusion model ${\epsilon}_{\phi}^{\text{2D}}$.
+      </p>
+    </div>
+  </section>
+
+  <section class="video-comparison-section">
+    <!-- <div class="container is-max-desktop"> -->
+    <!-- <h2 class="title is-3" style="text-align: center;">Results</h2> -->
+    
+    <h3>Generation Results</h3>
+    <br>
+
+     <video id="comparison" autoplay muted controls loop playsinline height="100%">
+      <source src="./static/videos/demo.mp4"
+        type="video/mp4">
+    </video>
+    
+    <p style="text-align: left; margin-top: 25px;font-size: 18px;">
+      ScenDi generates high-quality urban scenes using a 3D-to-2D Scene Diffusion cascade, 
+      with optional condition signals like text and layout for controllable 3D space generation.
+    </p>
+
+    <h3>Camera Controllability</h3>
+    <br>
+
+    <div class="video-container">
+        <div class="video-item">
+            <h4>Turn Right</h4>
+            <video controls autoplay muted loop>
+                <source src="./static/videos/turn_right.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-item">
+            <h4>Move Right</h4>
+            <video controls autoplay muted loop>
+                <source src="./static/videos/move_right.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-item">
+            <h4>Turn Left</h4>
+            <video controls autoplay muted loop>
+                <source src="./static/videos/turn_left.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-item">
+            <h4>Move Left</h4>
+            <video controls autoplay muted loop>
+                <source src="./static/videos/move_left.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <p style="text-align: left; margin-top: 25px;font-size: 18px;">
+      Our method allows for rendering corresponding scene views from flexible camera trajectories, 
+      even though our training data primarily consists of forward-moving trajectories.
+    </p>
+  
+    <h3>Comparison with Baselines</h3>
+    
+    <video id="comparison" autoplay muted controls loop playsinline height="100%">
+      <source src="./static/videos/3d_baselines.mp4"
+        type="video/mp4">
+    </video>
+    
+    <video id="comparison" autoplay muted controls loop playsinline height="100%">
+      <source src="./static/videos/i2v_baselines.mp4"
+        type="video/mp4">
+    </video>
+
+    <p style="text-align: left; margin-top: 25px;font-size: 12px;"></p>
+    *Image-to-video baselines use different conditional signal from ours, they are more direct due to the overlap 
+    between the first frame and subsequent frames. Nevertheless, our method achieves comparable performance.
+    </p>
+  </section>
+
+    
+</section>
+<style>
+  .video-comparison-section {
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 1200px;
+  }
+  .video-comparison-section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2em;
+  }
+  .video-comparison-section h3 {
+      text-align: left;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      color: #333;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+  }
+  .video-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1.8fr);
+      gap: 20px;
+      justify-items: center;
+  }
+  .video-item {
+      text-align: center;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .video-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .video-item h4 {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+      color: #555;
+  }
+  .video-item video {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+  }
+
+  /* Emphasized style for "Ours" */
+  .video-item.emphasized {
+      border: 3px solid #4CAF50; /* Green border */
+      background-color: #e8f5e9; /* Light green background */
+      box-shadow: 0 4px 10px rgba(0, 128, 0, 0.3); /* Stronger shadow */
+      transform: scale(1.05); /* Slight enlargement */
+  }
+  .video-item.emphasized h4 {
+      color: #2e7d32; /* Dark green font */
+      font-weight: bold;
+      font-size: 1.3em;
+  }
+  .video-item.emphasized video {
+      border: 2px solid #4CAF50; /* Green border around video */
+  }
+</style>
+
+      <!--/ Matting. -->
+
+
+      <!-- Concurrent Work. -->
+      <!-- <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Related Links</h2>
+
+          <div class="content has-text-justified">
+            <p>
+              There's a lot of excellent work that was introduced around the same time as ours.
+            </p>
+            <p>
+              <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an
+              idea similar to our windowed position encoding for coarse-to-fine optimization.
+            </p>
+          </div>
+        </div>
+      </div> -->
+      <!--/ Concurrent Work. -->
+
+    </div>
+  </section>
+
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{guo2026scendi3dto2dscenediffusion,
+        title={ScenDi: 3D-to-2D Scene Diffusion Cascades for Urban Generation}, 
+        author={Hanlei Guo and Jiahao Shao and Xinya Chen and Xiyang Tan and Sheng Miao and Yujun Shen and Yiyi Liao},
+        year={2026},
+        eprint={2601.15221},
+        archivePrefix={arXiv},
+        primaryClass={cs.CV},
+        url={https://arxiv.org/abs/2601.15221}, 
+  }</code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="https://arxiv.org/abs/2411.17189", style="color: black">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              The source code of this website is borrowed from <a
+                href="https://github.com/nerfies/nerfies.github.io">nerfies</a>.
+              We thank the authors for sharing the template.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
